@@ -1,0 +1,10 @@
+[project]
+name = "capslockstep-project"
+version = "0.1.0"
+requires-python = ">=3.14"
+
+[tool.uv.workspace]
+members = [
+    "packages/cli",
+    "packages/api",
+]

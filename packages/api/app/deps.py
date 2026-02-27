@@ -3,6 +3,8 @@ from typing import Annotated
 from fastapi import Depends
 from redis.asyncio import Redis
 
+from app.settings import settings
+
 
 def channel_key(room_id: str) -> str:
     return f"capslockstep:room:{room_id}:channel"
@@ -13,7 +15,7 @@ def state_key(room_id: str) -> str:
 
 
 async def get_redis_client():
-    client = Redis.from_url("redis://localhost:6767", decode_responses=True)
+    client = Redis.from_url(settings.REDIS_URL, decode_responses=True)
     try:
         yield client
     finally:

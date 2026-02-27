@@ -6,7 +6,9 @@ authors = [
     { name = "Jonathan Ehwald", email = "github@ehwald.info" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "libevdev>=0.13.1",
+]
 
 [project.scripts]
 capslockstep = "capslockstep.cli:main"

@@ -43,6 +43,12 @@ wheels = [
 name = "capslockstep"
 version = "0.1.0"
 source = { editable = "packages/cli" }
+dependencies = [
+    { name = "libevdev" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "libevdev", specifier = ">=0.13.1" }]
 
 [[package]]
 name = "capslockstep-api"
@@ -288,6 +294,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d", size = 245115, upload-time = "2025-03-05T20:05:02.478Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67", size = 134899, upload-time = "2025-03-05T20:05:00.369Z" },
+]
+
+[[package]]
+name = "libevdev"
+version = "0.13.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/ff/4f8ab38330965168be742b772bcd151a7a052ea17b2481c43a607875d4ed/libevdev-0.13.1.tar.gz", hash = "sha256:dc3369cd1401767b9ecb1117cd6b73faba9038e3bd9e1695a710a9e9d9415e8d", size = 61523, upload-time = "2025-11-14T07:27:11.932Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/da/81/a61deef77c83752bb28aac9373676d9f2218a53bfd7bfb9baf10c612dc3c/libevdev-0.13.1-py3-none-any.whl", hash = "sha256:1a15dc796ecb1cba679fc564686f9efab5124efae6e41dba8f4bf377d5a72f4a", size = 33627, upload-time = "2025-11-14T07:27:10.253Z" },
 ]
 
 [[package]]

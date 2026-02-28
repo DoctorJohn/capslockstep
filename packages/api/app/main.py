@@ -1,5 +1,4 @@
 import asyncio
-from contextlib import suppress
 from datetime import UTC, datetime
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -22,21 +21,7 @@ async def caps_lock_ws(
     pubsub = redis.pubsub()
     await pubsub.subscribe(channel_key)
 
-    async def reader():
-        with suppress(asyncio.CancelledError):
-            async for message in pubsub.listen():
-                if message["type"] == "message":
-                    serialized_state = message["data"]
-                    state = CapsLockState.model_validate_json(serialized_state)
-                    await websocket.send_text(state.model_dump_json())
-
-    reader_task = asyncio.create_task(reader())
-
-    try:
-        if serialized_state := await redis.get(state_key):
-            state = CapsLockState.model_validate_json(serialized_state)
-            await websocket.send_text(state.model_dump_json())
-
+    async def receiver():
         while True:
             serialized_state = await websocket.receive_text()
             event = CapsLockEvent.model_validate_json(serialized_state)
@@ -45,10 +30,24 @@ async def caps_lock_ws(
 
             await redis.set(state_key, serialized_state)
             await redis.publish(channel_key, serialized_state)
-    except WebSocketDisconnect:
+
+    async def sender():
+        async for message in pubsub.listen():
+            if message["type"] == "message":
+                serialized_state = message["data"]
+                state = CapsLockState.model_validate_json(serialized_state)
+                await websocket.send_text(state.model_dump_json())
+
+    try:
+        async with asyncio.TaskGroup() as tg:
+            tg.create_task(receiver())
+            tg.create_task(sender())
+
+            if serialized_state := await redis.get(state_key):
+                state = CapsLockState.model_validate_json(serialized_state)
+                await websocket.send_text(state.model_dump_json())
+    except* WebSocketDisconnect:
         pass
     finally:
-        reader_task.cancel()
-        await reader_task
         await pubsub.unsubscribe(channel_key)
         await pubsub.aclose()

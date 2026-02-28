@@ -31,25 +31,27 @@ def main():
 
 
 async def stay_lock_step(caps_lock: CapsLock, api_url: str, room_id: str) -> None:
-    async with aiohttp.ClientSession() as session:
-        async with session.ws_connect(f"wss://{api_url}/caps-lock/{room_id}") as ws:
+    async with (
+        aiohttp.ClientSession() as session,
+        session.ws_connect(f"wss://{api_url}/caps-lock/{room_id}") as ws,
+    ):
 
-            async def writer():
-                with suppress(asyncio.CancelledError):
-                    async for new_value in caps_lock.watch():
-                        event = CapsLockEvent(value=new_value)
-                        await ws.send_str(event.model_dump_json())
+        async def writer():
+            with suppress(asyncio.CancelledError):
+                async for new_value in caps_lock.watch():
+                    event = CapsLockEvent(value=new_value)
+                    await ws.send_str(event.model_dump_json())
 
-            writer_task = asyncio.create_task(writer())
+        writer_task = asyncio.create_task(writer())
 
-            try:
-                async for message in ws:
-                    if message.type == aiohttp.WSMsgType.TEXT:
-                        serialized_state = message.data
-                        state = CapsLockState.model_validate_json(serialized_state)
-                        caps_lock.set(state.value)
-            except asyncio.CancelledError:
-                pass
-            finally:
-                writer_task.cancel()
-                await writer_task
+        try:
+            async for message in ws:
+                if message.type == aiohttp.WSMsgType.TEXT:
+                    serialized_state = message.data
+                    state = CapsLockState.model_validate_json(serialized_state)
+                    caps_lock.set(state.value)
+        except asyncio.CancelledError:
+            pass
+        finally:
+            writer_task.cancel()
+            await writer_task

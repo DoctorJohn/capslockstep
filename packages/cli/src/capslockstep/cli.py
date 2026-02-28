@@ -6,6 +6,7 @@ from contextlib import suppress
 import aiohttp
 
 from capslockstep.key import CapsLock, CapsLockLinux
+from capslockstep.models import CapsLockEvent, CapsLockState
 
 
 def main():
@@ -29,18 +30,18 @@ async def stay_lock_step(caps_lock: CapsLock, api_url: str, room_id: str) -> Non
 
             async def writer():
                 with suppress(asyncio.CancelledError):
-                    async for new_state in caps_lock.watch():
-                        event = {"value": new_state}
-                        await ws.send_json(event)
+                    async for new_value in caps_lock.watch():
+                        event = CapsLockEvent(value=new_value)
+                        await ws.send_str(event.model_dump_json())
 
             writer_task = asyncio.create_task(writer())
 
             try:
                 async for message in ws:
                     if message.type == aiohttp.WSMsgType.TEXT:
-                        state = message.json()
-                        value = state["value"]
-                        caps_lock.set(value)
+                        serialized_state = message.data
+                        state = CapsLockState.model_validate_json(serialized_state)
+                        caps_lock.set(state.value)
             except asyncio.CancelledError:
                 pass
             finally:

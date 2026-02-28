@@ -22,7 +22,7 @@ class CapsLockLinux(CapsLock):
         self.dev.name = "Caps Lock Step Device"
         self.dev.enable(libevdev.KEY_CAPSLOCK)
         self.uinput = self.dev.create_uinput_device()
-        self.old_value: bool | None = None
+        self.old_value = self.get_current_value()
 
     async def watch(self) -> AsyncGenerator[bool]:
         while True:

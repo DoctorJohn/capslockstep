@@ -5,7 +5,7 @@ from contextlib import suppress
 
 import aiohttp
 
-from capslockstep.key import CapsLock, CapsLockLinux
+from capslockstep.keys.base import CapsLock
 from capslockstep.models import CapsLockEvent, CapsLockState
 
 
@@ -17,7 +17,13 @@ def main():
 
     match platform.system():
         case "Linux":
+            from capslockstep.keys.linux import CapsLockLinux
+
             caps_lock = CapsLockLinux()
+        case "Darwin":
+            from capslockstep.keys.macos import CapsLockMacOS
+
+            caps_lock = CapsLockMacOS()
         case _:
             raise NotImplementedError(f"Unsupported system: {platform.system()}")
 

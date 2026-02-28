@@ -1,19 +1,9 @@
 import asyncio
-from abc import ABC, abstractmethod
 from collections.abc import AsyncGenerator
 from pathlib import Path
 
+from capslockstep.keys.base import CapsLock
 import libevdev
-
-
-class CapsLock(ABC):
-    @abstractmethod
-    def watch(self) -> AsyncGenerator[bool]:
-        """Watch for changes to the Caps Lock key state"""
-
-    @abstractmethod
-    def set(self, value: bool) -> None:
-        """Set the state of the Caps Lock key to the given value."""
 
 
 class CapsLockLinux(CapsLock):
@@ -53,3 +43,4 @@ class CapsLockLinux(CapsLock):
             path.read_text().strip() == "1"
             for path in Path("/sys/class/leds").glob("input*::capslock/brightness")
         )
+

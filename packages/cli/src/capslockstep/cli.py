@@ -34,7 +34,7 @@ def main():
 async def stay_lock_step(caps_lock: CapsLock, api_url: str, room_id: str) -> None:
     async with (
         aiohttp.ClientSession() as session,
-        session.ws_connect(f"wss://{api_url}/caps-lock/{room_id}") as ws,
+        session.ws_connect(f"wss://{api_url}/{room_id}") as ws,
         asyncio.TaskGroup() as tg,
     ):
 

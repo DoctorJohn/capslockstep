@@ -10,7 +10,7 @@ from app.models import CapsLockEvent, CapsLockState
 app = FastAPI()
 
 
-@app.websocket("/caps-lock/{room_id}")
+@app.websocket("/{room_id}")
 async def caps_lock_ws(
     websocket: WebSocket,
     redis: RedisClientDep,

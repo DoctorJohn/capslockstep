@@ -9,3 +9,8 @@ members = [
     "packages/cli",
     "packages/api",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.4",
+]

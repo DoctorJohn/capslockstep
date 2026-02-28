@@ -43,4 +43,3 @@ class CapsLockLinux(CapsLock):
             path.read_text().strip() == "1"
             for path in Path("/sys/class/leds").glob("input*::capslock/brightness")
         )
-

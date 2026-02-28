@@ -24,6 +24,10 @@ def main():
             from capslockstep.keys.macos import CapsLockMacOS
 
             caps_lock = CapsLockMacOS()
+        case "Windows":
+            from capslockstep.keys.windows import CapsLockWindows
+
+            caps_lock = CapsLockWindows()
         case _:
             raise NotImplementedError(f"Unsupported system: {platform.system()}")
 

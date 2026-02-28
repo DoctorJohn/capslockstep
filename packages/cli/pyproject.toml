@@ -1,6 +1,6 @@
 [project]
 name = "capslockstep"
-version = "0.2.0"
+version = "0.3.0"
 description = "Add your description here"
 authors = [
     { name = "Jonathan Ehwald", email = "github@ehwald.info" }

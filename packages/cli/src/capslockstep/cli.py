@@ -12,7 +12,7 @@ from capslockstep.models import CapsLockEvent, CapsLockState
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("room_id", help="The ID of the room to join")
-    parser.add_argument("--api-url", default="capslockstep.fastapicloud.dev")
+    parser.add_argument("--api-url", default="wss://capslockstep.fastapicloud.dev")
     args = parser.parse_args()
 
     match platform.system():
@@ -34,7 +34,7 @@ def main():
 async def stay_lock_step(caps_lock: CapsLock, api_url: str, room_id: str) -> None:
     async with (
         aiohttp.ClientSession() as session,
-        session.ws_connect(f"wss://{api_url}/{room_id}") as ws,
+        session.ws_connect(f"{api_url}/{room_id}") as ws,
         asyncio.TaskGroup() as tg,
     ):
 

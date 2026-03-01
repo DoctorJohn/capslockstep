@@ -47,10 +47,12 @@ async def stay_lock_step(caps_lock: CapsLock, api_url: str, room_id: str) -> Non
                 event = CapsLockEvent(value=new_value)
                 await ws.send_str(event.model_dump_json())
 
-        tg.create_task(sender())
+        async def receiver():
+            async for message in ws:
+                if message.type == aiohttp.WSMsgType.TEXT:
+                    serialized_state = message.data
+                    state = CapsLockState.model_validate_json(serialized_state)
+                    caps_lock.set(state.value)
 
-        async for message in ws:
-            if message.type == aiohttp.WSMsgType.TEXT:
-                serialized_state = message.data
-                state = CapsLockState.model_validate_json(serialized_state)
-                caps_lock.set(state.value)
+        tg.create_task(sender())
+        tg.create_task(receiver())

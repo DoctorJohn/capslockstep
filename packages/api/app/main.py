@@ -32,6 +32,10 @@ async def caps_lock_ws(
             await redis.publish(channel_key, serialized_state)
 
     async def sender():
+        if serialized_state := await redis.get(state_key):
+            state = CapsLockState.model_validate_json(serialized_state)
+            await websocket.send_text(state.model_dump_json())
+
         async for message in pubsub.listen():
             if message["type"] == "message":
                 serialized_state = message["data"]
@@ -42,10 +46,6 @@ async def caps_lock_ws(
         async with asyncio.TaskGroup() as tg:
             tg.create_task(receiver())
             tg.create_task(sender())
-
-            if serialized_state := await redis.get(state_key):
-                state = CapsLockState.model_validate_json(serialized_state)
-                await websocket.send_text(state.model_dump_json())
     except* WebSocketDisconnect:
         pass
     finally:

@@ -1,17 +1,28 @@
 [project]
 name = "capslockstep"
 version = "0.3.0"
-description = "Add your description here"
-authors = [
-    { name = "Jonathan Ehwald", email = "github@ehwald.info" }
-]
+description = "Sync your Caps Lock state with friends across the interwebs!"
+authors = [{ name = "Jonathan Ehwald", email = "github@ehwald.info" }]
 license = { text = "MIT" }
 requires-python = ">=3.14"
-dependencies = [
-    "aiohttp>=3.13.3",
-    "libevdev>=0.13.1",
-    "pydantic>=2.12.5",
+dependencies = ["aiohttp>=3.13.3", "libevdev>=0.13.1", "pydantic>=2.12.5"]
+classifiers = [
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Typing :: Typed",
 ]
+
+[project.urls]
+homepage = "https://github.com/DoctorJohn/capslockstep"
+repository = "https://github.com/DoctorJohn/capslockstep"
+documentation = "https://github.com/DoctorJohn/capslockstep"
 
 [project.scripts]
 capslockstep = "capslockstep.cli:main"

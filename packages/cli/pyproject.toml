@@ -1,6 +1,6 @@
 [project]
 name = "capslockstep"
-version = "0.3.0"
+version = "0.4.0"
 description = "Sync your Caps Lock state with friends across the interwebs!"
 authors = [{ name = "Jonathan Ehwald", email = "github@ehwald.info" }]
 license = { text = "MIT" }
